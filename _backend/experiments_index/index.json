@@ -1,0 +1,19 @@
+[
+  {
+    "experiment_id": "VIT-20251201-gta-01",
+    "project": "VIT",
+    "topic": "gta",
+    "status": "completed",
+    "start_time": "2025-12-01T13:03:02.295445",
+    "end_time": "2025-12-01T13:03:02.295445",
+    "entry_point": "scripts/global_feature_experiments.py",
+    "config_path": "configs/global_feature_mvp.yaml",
+    "output_path": "results/global_features",
+    "log_path": null,
+    "metrics_summary": "R2=0.9986, Best=MVP_F1F2F3_nz1p0, Dim=121, Time=32s",
+    "physics_ai_logg_path": null,
+    "priority": "P1",
+    "next_action": null,
+    "notes": null
+  }
+]

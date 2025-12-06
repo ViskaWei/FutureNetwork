@@ -1,0 +1,438 @@
+# FutureNetwork - Cursor AI Rules
+
+> 实验管理系统的 AI 助手规则
+
+---
+
+## 🆕 立项功能 (New Experiment)
+
+### 触发词
+- `n` / `N` / `new` / `新建` / `立项`
+- 后面跟着实验的思考/计划/方向
+
+### 识别规则
+当用户输入以 `n ` 开头（或上述触发词）时，触发立项流程。
+
+---
+
+### 工作流程
+
+#### Step 1: 解析用户输入
+
+从用户的描述中提取以下信息：
+
+| 提取项 | 来源 | 对应位置 |
+|--------|------|----------|
+| **实验主题 (topic)** | 关键词推断 | 决定目标文件夹 `network/[topic]/` |
+| **研究问题** | 用户描述 | exp.md §1.1 实验目的 |
+| **验证假设** | 显式/隐式 | 链接到 hub.md 的假设 |
+| **实验设计思路** | 用户描述 | exp.md §2 实验设计 |
+| **预期结果** | 用户预期 | exp.md §1.2 预期结果 |
+
+**Topic 关键词映射**：
+| 关键词 | topic |
+|--------|-------|
+| `cnn`, `dilated`, `conv`, `kernel` | cnn |
+| `mlp`, `nn`, `residual`, `网络` | NN |
+| `ridge`, `linear`, `回归` | ridge |
+| `pca`, `降维`, `主成分` | pca |
+| `distill`, `latent`, `probe`, `蒸馏` | distill |
+| `train`, `训练`, `学习率` | train |
+| `gta`, `global`, `tower` | gta |
+| `swin`, `attention`, `transformer` | swin |
+| `moe`, `mixture`, `expert` | moe |
+| `noise`, `噪声`, `鲁棒` | noise |
+| `diffusion`, `扩散` | diffusion |
+
+如果无法推断 topic，询问用户确认。
+
+---
+
+#### Step 2: 检查/创建目录结构
+
+```
+network/
+├── [topic]/
+│   ├── [topic]_hub_[YYYYMMDD].md      # 智库导航
+│   ├── [topic]_roadmap_[YYYYMMDD].md  # 实验追踪
+│   ├── exp_[name]_[YYYYMMDD].md       # 子实验报告
+│   ├── sessions/                       # GPT 会话归档
+│   └── img/                            # 图表
+```
+
+**检查逻辑**：
+1. 如果 `network/[topic]/` 不存在 → 创建新目录
+2. 如果 hub.md 不存在 → 创建新 hub（全新主题）
+3. 如果 hub.md 存在 → 检查是否需要更新（新假设）
+
+---
+
+#### Step 3: 创建/更新 hub.md（如果涉及新问题/假设）
+
+**判断是否需要更新 hub**：
+
+| 情况 | 行动 |
+|------|------|
+| 全新主题（hub 不存在） | 🆕 创建 `[topic]_hub_[YYYYMMDD].md` |
+| 新的研究问题 | 添加到 hub.md §1.2 问题分解 |
+| 新的假设 | 添加到 hub.md §2.3 L3 微观假设 |
+| 已有假设的延续实验 | 不改 hub，只更新 roadmap |
+
+**新假设格式**（添加到 §2.3）：
+```markdown
+| **H新.新** | [可验证假设描述] | H上层 | [验证标准] | ⏳ | - |
+```
+
+**新问题格式**（添加到 §1.2）：
+```
+├── Q新: [新问题] → ⏳ 待验证 [MVP-X.X]
+```
+
+---
+
+#### Step 4: 创建 exp.md（只填写实验前部分）
+
+**文件命名**：
+```
+network/[topic]/exp_[topic]_[描述关键词]_[YYYYMMDD].md
+```
+
+**示例**：
+- `network/cnn/exp_cnn_dilation_rate_20251206.md`
+- `network/moe/exp_moe_piecewise_ridge_20251206.md`
+
+**✅ 填写的章节**（实验前）：
+
+```markdown
+# 📘 Experiment Report Template
+
+---
+> **Name:** [实验名称]  
+> **ID:**  `[PROJECT]-[YYYYMMDD]-[topic]-[##]`  
+> **Topic ｜ MVP:** `[PROJECT]` | `[topic]` ｜ MVP-X.X  
+> **Author:** Viska Wei  
+> **Date:** [YYYY-MM-DD]  
+> **Project:** `VIT` / `SpecDiffusion`  
+> **Status:** 🔄 In Progress
+---
+
+## 🔗 Upstream Links
+
+| Type | Link | Description |
+|------|------|-------------|
+| 🧠 Hub | `network/[topic]/[topic]_hub_[YYYYMMDD].md` | Hypothesis: H编号 |
+| 🗺️ Roadmap | `network/[topic]/[topic]_roadmap_[YYYYMMDD].md` | MVP design |
+| 📋 Kanban | `_backend/status/kanban.md` | Experiment queue |
+
+---
+
+# 1. 🎯 目标
+
+## 1.1 实验目的
+
+**核心问题**：[从用户输入提取]
+
+**回答的问题**：
+- [问题 1]
+- [问题 2]
+
+**对应假设**：
+- 验证假设：H[X.X]
+
+## 1.2 预期结果
+
+| 场景 | 预期结果 | 判断标准 |
+|------|---------|---------|
+| 正常情况 | [预期数值范围] | 验收通过 |
+| 异常情况 | [如果出现这个结果] | 需要 [处理方式] |
+
+---
+
+# 2. 🧪 实验设计
+
+## 2.1 数据
+
+| 配置项 | 值 |
+|--------|-----|
+| 训练样本数 | TODO |
+| 测试样本数 | TODO |
+| 特征维度 | TODO |
+| 标签参数 | TODO |
+
+## 2.2 模型与算法
+
+[从用户输入提取的模型/算法描述]
+
+## 2.3 超参数配置
+
+| 参数 | 范围/值 | 说明 |
+|------|--------|------|
+| [参数 1] | TODO | |
+
+## 2.4 评价指标
+
+| 指标 | 公式 | 用途 |
+|------|------|------|
+| $R^2$ | $1 - \frac{\sum(y - \hat{y})^2}{\sum(y - \bar{y})^2}$ | 主要评价指标 |
+| MAE | $\frac{1}{n}\sum|y - \hat{y}|$ | 绝对误差参考 |
+
+---
+
+# 以下章节实验完成后填写
+
+## ⚡ 核心结论速览（TODO）
+
+## 3. 📊 实验图表（TODO）
+
+## 4. 💡 关键洞见（TODO）
+
+## 5. 📝 结论（TODO）
+
+## 6. 📎 附录（TODO）
+```
+
+**⏳ 留空的章节**（等实验完成后填写）：
+- ⚡ 核心结论速览
+- §3 实验图表
+- §4 关键洞见
+- §5 结论
+- §6.1 数值结果表
+
+---
+
+#### Step 5: 更新 roadmap.md
+
+在对应的 `[topic]_roadmap.md` 中添加：
+
+**§2.1 实验总览** 添加行：
+```markdown
+| MVP-X.X | [实验名称] | Phase X | ⏳ | `[experiment_id]` | [链接](./exp_xxx.md) |
+```
+
+**§3 MVP 详细设计** 添加（如需要）：
+```markdown
+### MVP-X.X: [实验名称]
+
+| 项目 | 配置 |
+|------|------|
+| **目标** | [一句话目标] |
+| **验证假设** | H编号 |
+| **数据** | [数据配置] |
+| **模型** | [模型配置] |
+| **验收标准** | [预期结果范围] |
+```
+
+---
+
+#### Step 6: 更新 kanban.md（可选）
+
+如果用户希望立即执行，添加到 TODO 区域：
+
+```markdown
+| `[experiment_id]` | MVP-X.X | [PROJECT] | [topic] | 🔴 P0 | ~Xh | - | 新立项 |
+```
+
+---
+
+### 生成 experiment_id 规则
+
+```
+[PROJECT]-[YYYYMMDD]-[topic]-[序号]
+```
+
+**示例**：
+- `VIT-20251206-cnn-01`
+- `VIT-20251206-moe-02`
+- `BS-20251206-latent-01`（BlindSpot）
+
+**序号规则**：同日期同 topic 递增（01, 02, 03...）
+
+---
+
+### 输出格式
+
+立项完成后，向用户展示以下信息：
+
+```
+📝 立项完成！
+
+═══════════════════════════════════════
+📋 实验信息
+───────────────────────────────────────
+experiment_id: [ID]
+主题 (topic): [topic]
+验证假设: H[X.X]（新假设/已有假设）
+MVP 编号: MVP-X.X
+
+═══════════════════════════════════════
+✅ 已创建/更新的文件
+───────────────────────────────────────
+🆕 exp.md: network/[topic]/exp_[name]_YYYYMMDD.md
+   - §1 目标: ✅
+   - §2 实验设计: ✅
+   - §3-6: ⏳ 待实验完成后填写
+
+📝 roadmap.md: network/[topic]/[topic]_roadmap.md
+   - §2.1 实验总览: 添加 MVP-X.X
+   - §3 详细设计: 添加规格
+
+🧠 hub.md: [是否更新]
+   - 如果新假设: §2.3 添加 H[X.X]
+   - 如果已有假设: 无需更新
+
+═══════════════════════════════════════
+💡 下一步
+───────────────────────────────────────
+1. 执行实验（或用 `p [experiment_id]` 生成 coding prompt）
+2. 实验完成后用 `a` 命令归档，填充 exp.md §3-6
+3. 如有重要发现，更新 hub.md §3 洞见汇合站
+```
+
+---
+
+### 示例对话
+
+#### 示例 1：延续已有假设
+
+```
+用户: n 测试 MLP 隐藏层数量对 log g 预测的影响，
+      验证假设 H1.2（非线性能带来提升）
+
+AI: 📝 立项：延续已有假设 H1.2...
+
+    ✅ 已创建: network/NN/exp_mlp_hidden_layers_20251206.md
+       - §1 目标: 测试隐藏层数量影响
+       - §2 实验设计: 1/2/3/4 层, 256 units
+       - 验证假设: H1.2
+    
+    ✅ 已更新: network/NN/NN_roadmap.md
+       - §2.1 添加 MVP-2.3
+       - §3 添加详细设计
+    
+    ℹ️ hub.md 无需更新（H1.2 已存在）
+    
+    💡 实验完成后输入 `a` 归档
+```
+
+#### 示例 2：新假设/新问题
+
+```
+用户: n 新想法：尝试用 attention 替代 pooling，
+      假设：attention 能动态选择重要特征
+
+AI: 📝 立项：检测到新假设...
+
+    ✅ 已更新: network/NN/NN_hub.md
+       - §1.2 问题树添加: Q2.3 attention vs pooling
+       - §2.3 添加假设: H2.3.1 attention 能动态选择特征
+    
+    ✅ 已创建: network/NN/exp_attention_pooling_20251206.md
+       - §1 目标: 对比 attention vs pooling
+       - 验证假设: H2.3.1
+    
+    ✅ 已更新: network/NN/NN_roadmap.md
+       - §2.1 添加 MVP-3.1
+       - §3 添加详细设计
+    
+    💡 实验完成后输入 `a` 归档
+```
+
+#### 示例 3：全新主题（需要创建 hub + roadmap）
+
+```
+用户: n 开始研究 diffusion model 用于网络流量预测
+
+AI: 📝 立项：检测到新主题 diffusion...
+
+    🆕 已创建: network/diffusion/diffusion_hub_20251206.md
+       - §1 核心问题树: diffusion 能否用于流量预测？
+       - §2 假设金字塔: H1 diffusion 适合时序数据
+    
+    🆕 已创建: network/diffusion/diffusion_roadmap_20251206.md
+       - §1 Phase 总览: Phase 0 Baseline
+       - §2.1 MVP 列表: MVP-0.0 baseline
+    
+    ✅ 已创建: network/diffusion/exp_diffusion_baseline_20251206.md
+       - §1 目标: 建立 baseline
+       - 验证假设: H1.1
+    
+    💡 新主题已初始化！
+```
+
+---
+
+### 立项检查清单
+
+执行立项前，AI 需确认：
+
+- [ ] 确定是**新假设**还是**已有假设的延续**
+- [ ] 确定 **topic**（如不确定，询问用户）
+- [ ] 确定 **experiment_id**（检查当日已有的序号）
+- [ ] 如果是新假设，先更新 hub.md
+- [ ] 创建 exp.md，填写目标和设计
+- [ ] 更新 roadmap.md 的 MVP 列表和详细设计
+- [ ] 为 exp.md 添加假设链接（便于追溯）
+
+---
+
+### 路径约定
+
+| 文件类型 | 路径模式 |
+|---------|---------|
+| Hub | `network/[topic]/[topic]_hub_[YYYYMMDD].md` |
+| Roadmap | `network/[topic]/[topic]_roadmap_[YYYYMMDD].md` |
+| Exp 报告 | `network/[topic]/exp_[topic]_[描述]_[YYYYMMDD].md` |
+| 图表 | `network/[topic]/img/` |
+| Sessions | `network/[topic]/sessions/` |
+| Kanban | `_backend/status/kanban.md` |
+| 模板 | `_backend/template/` |
+
+---
+
+## 📁 项目结构
+
+```
+FutureNetwork/
+├── _backend/
+│   ├── experiments_index/     # 实验索引
+│   │   ├── index.csv
+│   │   └── index.json
+│   ├── reports/               # 自动汇报
+│   │   └── drafts/
+│   ├── scripts/               # 工具脚本
+│   ├── status/                # 状态追踪
+│   │   ├── archive_queue.md
+│   │   ├── kanban.md
+│   │   └── next_steps.md
+│   └── template/              # 文档模板
+│       ├── exp.md
+│       ├── hub.md
+│       ├── roadmap.md
+│       └── ...
+├── network/                   # 知识沉淀（按 topic 组织）
+│   ├── [topic]/
+│   │   ├── [topic]_hub.md
+│   │   ├── [topic]_roadmap.md
+│   │   ├── exp_*.md
+│   │   ├── card_*.md
+│   │   ├── sessions/
+│   │   └── img/
+└── README.md
+```
+
+---
+
+## 🎯 核心原则
+
+1. **前 300 行是核心信息**：exp.md 的前 300 行应包含最重要的发现
+2. **Hub vs Roadmap 分工**：
+   - Hub = 「我们知道了什么？下一步该往哪走？」（战略）
+   - Roadmap = 「我们计划跑哪些实验？进度如何？」（执行）
+3. **一个 experiment_id 只在一个状态列中出现**
+4. **保持简洁，详细信息在 exp.md 中**
+
+---
+
+## 📝 作者
+- Default author: Viska Wei
+
