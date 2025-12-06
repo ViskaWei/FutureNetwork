@@ -1,0 +1,99 @@
+{
+  "timestamp": "2025-12-06T01:36:33.420099", 
+  "test_type": "fixes", 
+  "udp_loss_sweep": [
+    {
+      "udp": {
+        "throughput_mbps": 49.5117, 
+        "jitter_ms": 0.00101432, 
+        "lost_percent": 0, 
+        "total_packets": 7555, 
+        "lost_packets": 0
+      }, 
+      "loss_percent": 0
+    }, 
+    {
+      "udp": {
+        "throughput_mbps": 49.5051, 
+        "jitter_ms": 0.000826272, 
+        "lost_percent": 0.767805, 
+        "total_packets": 7554, 
+        "lost_packets": 58
+      }, 
+      "loss_percent": 1
+    }, 
+    {
+      "udp": {
+        "throughput_mbps": 49.5051, 
+        "jitter_ms": 0.000638139, 
+        "lost_percent": 4.87159, 
+        "total_packets": 7554, 
+        "lost_packets": 368
+      }, 
+      "loss_percent": 5
+    }, 
+    {
+      "udp": {
+        "throughput_mbps": 49.5051, 
+        "jitter_ms": 0.00077146, 
+        "lost_percent": 10.0755, 
+        "total_packets": 7553, 
+        "lost_packets": 761
+      }, 
+      "loss_percent": 10
+    }, 
+    {
+      "udp": {
+        "throughput_mbps": 49.5051, 
+        "jitter_ms": 0.000725814, 
+        "lost_percent": 19.4227, 
+        "total_packets": 7553, 
+        "lost_packets": 1467
+      }, 
+      "loss_percent": 20
+    }
+  ], 
+  "experiment_id": "FN-20251206-network-01", 
+  "http_bandwidth_limited": [
+    {
+      "bandwidth_mbps": 10, 
+      "download_time_s": 0.0, 
+      "speed_mbps": null, 
+      "loss_percent": 0, 
+      "delay_ms": 0, 
+      "condition": "baseline (10Mbps)"
+    }, 
+    {
+      "bandwidth_mbps": 10, 
+      "download_time_s": 0.0, 
+      "speed_mbps": null, 
+      "loss_percent": 5, 
+      "delay_ms": 0, 
+      "condition": "5% loss"
+    }, 
+    {
+      "bandwidth_mbps": 10, 
+      "download_time_s": 0.001, 
+      "speed_mbps": null, 
+      "loss_percent": 0, 
+      "delay_ms": 50, 
+      "condition": "50ms delay"
+    }, 
+    {
+      "bandwidth_mbps": 10, 
+      "download_time_s": 0.001, 
+      "speed_mbps": null, 
+      "loss_percent": 5, 
+      "delay_ms": 50, 
+      "condition": "5% loss + 50ms delay"
+    }, 
+    {
+      "bandwidth_mbps": 10, 
+      "download_time_s": 0.001, 
+      "speed_mbps": null, 
+      "loss_percent": 10, 
+      "delay_ms": 100, 
+      "condition": "10% loss + 100ms delay"
+    }
+  ]
+}

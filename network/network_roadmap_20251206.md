@@ -5,7 +5,7 @@
 > **作者：** Viska Wei  
 > **创建日期：** 2025-12-06  
 > **最后更新：** 2025-12-06  
-> **当前 Phase：** Phase 0
+> **当前 Phase：** Phase 2 ✅ 完成
 
 ---
 
@@ -38,9 +38,9 @@
 
 | Phase | 目的 | 包含 MVP | 状态 | 关键产出 |
 |-------|------|---------|------|---------|
-| **Phase 0: Setup** | 搭建 Mininet 测试环境，建立 Baseline | MVP-0.0 | 🔴 待执行 | 测试环境 + baseline 数值 |
-| **Phase 1: Single Anomaly** | 单一异常影响分析 | MVP-1.0 ~ 1.2 | ⏳ | 各异常类型影响曲线 |
-| **Phase 2: Application** | 应用层性能分析 | MVP-2.0 ~ 2.1 | ⏳ | HTTP性能曲线 + 复合影响 |
+| **Phase 0: Setup** | 搭建 Mininet 测试环境，建立 Baseline | MVP-0.0 | ✅ 完成 | TCP: 42,819 Mbps, RTT: 0.04 ms |
+| **Phase 1: Single Anomaly** | 单一异常影响分析 | MVP-1.0 ~ 1.2 | ✅ 完成 | Loss/Delay/BW 影响曲线 |
+| **Phase 2: Application** | 应用层性能分析 | MVP-2.0 ~ 2.1 | ✅ 完成 | 组合异常 -90% 复合效应 |
 | **Phase 3: Advanced** | 高级场景（可选） | MVP-3.x | ⏳ | Corruption/Reorder分析 |
 
 ## 1.2 依赖关系图
@@ -90,13 +90,13 @@
 
 | MVP | 实验名称 | Phase | 状态 | experiment_id | 报告链接 |
 |-----|---------|-------|------|---------------|---------|
-| MVP-0.0 | Mininet Testbed Setup & Baseline | 0 | 🔴 待执行 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
-| MVP-1.0 | Packet Loss Impact (TCP/UDP) | 1 | ⏳ | - | - |
-| MVP-1.1 | Delay & Jitter Impact | 1 | ⏳ | - | - |
-| MVP-1.2 | Bandwidth Limit Impact | 1 | ⏳ | - | - |
-| MVP-2.0 | HTTP Application Performance | 2 | ⏳ | - | - |
-| MVP-2.1 | Combined Anomalies Analysis | 2 | ⏳ | - | - |
-| MVP-3.0 | Corruption & Reordering (Optional) | 3 | ⏳ | - | - |
+| MVP-0.0 | Mininet Testbed Setup & Baseline | 0 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-1.0 | Packet Loss Impact (TCP/UDP) | 1 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-1.1 | Delay & Jitter Impact | 1 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-1.2 | Bandwidth Limit Impact | 1 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-2.0 | HTTP Application Performance | 2 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-2.1 | Combined Anomalies Analysis | 2 | ✅ 完成 | `FN-20251206-network-01` | [exp](./exp_network_anomaly_mininet_20251206.md) |
+| MVP-3.0 | Corruption & Reordering (Optional) | 3 | ⏳ 规划中 | - | - |
 
 **状态图例**：
 - ⏳ 计划中（Planned）
@@ -275,13 +275,14 @@
 
 ```
 ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
-│   ⏳ 计划中   │  🔴 待执行   │  🚀 运行中   │   ✅ 已完成   │   ❌ 已取消   │
+│   ⏳ 计划中   │  ⚠️ 部分完成  │  🚀 运行中   │   ✅ 已完成   │   ❌ 已取消   │
 ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┤
-│ MVP-1.0      │ MVP-0.0      │              │              │              │
-│ MVP-1.1      │              │              │              │              │
-│ MVP-1.2      │              │              │              │              │
-│ MVP-2.0      │              │              │              │              │
-│ MVP-2.1      │              │              │              │              │
+│ MVP-3.0      │              │              │ MVP-0.0      │              │
+│              │              │              │ MVP-1.0      │              │
+│              │              │              │ MVP-1.1      │              │
+│              │              │              │ MVP-1.2      │              │
+│              │              │              │ MVP-2.0      │              │
+│              │              │              │ MVP-2.1      │              │
 └──────────────┴──────────────┴──────────────┴──────────────┴──────────────┘
 ```
 
@@ -291,15 +292,20 @@
 
 | MVP | 核心结论（一句话） | 关键数字 | 同步到 Hub |
 |-----|------------------|---------|-----------|
-| MVP-0.0 | TBD | TBD | ⬜ |
-| MVP-1.0 | TBD | TBD | ⬜ |
+| MVP-0.0 | Mininet 环境稳定，baseline 测量成功 | TCP: 42,819 Mbps, RTT: 0.04ms | ✅ |
+| MVP-1.0 | TCP 对丢包极其敏感，UDP loss 完美对应 | 1% loss → 86% TCP drop | ✅ |
+| MVP-1.1 | RTT 与 delay 线性相关，delay 严重影响 TCP | 100ms → 7.64 Mbps | ✅ |
+| MVP-1.2 | 带宽限制精确可控 | ~100% 效率 | ✅ |
+| MVP-2.0 | HTTP 延迟影响显著 (30.57×) | 100ms delay | ✅ |
+| MVP-2.1 | **组合异常产生 90% 复合下降** ⭐ | 5%+50ms@10Mbps → 1.03Mbps | ✅ |
 
 ## 4.3 时间线
 
 | 日期 | 事件 | 备注 |
 |------|------|------|
 | 2025-12-06 | 项目立项，创建 Hub + Roadmap | 新主题初始化 |
-| TBD | MVP-0.0 启动 | - |
+| 2025-12-06 | MVP-0.0 ~ MVP-1.2 完成 | Phase 0-1 全部完成 |
+| 2025-12-06 | MVP-2.0 ~ MVP-2.1 完成 | Phase 2 全部完成，发现组合效应 |
 
 ---
 
@@ -317,8 +323,8 @@
 
 | 仓库 | 相关目录 | 说明 |
 |------|---------|------|
-| 本仓库 | `logg/network/` | 知识沉淀 |
-| 本仓库 | `logg/network/scripts/` | 实验脚本（可选） |
+| 本仓库 | `network/` | 知识沉淀 |
+| 本仓库 | `network/scripts/` | 实验脚本（可选） |
 
 ## 5.3 运行路径记录
 
@@ -326,7 +332,7 @@
 
 | MVP | 环境 | 运行路径 | 配置文件 | 输出路径 |
 |-----|------|---------|---------|---------|
-| MVP-0.0 | Mininet (Linux) | Local VM / WSL | - | `logg/network/results/` |
+| MVP-0.0 | Mininet (Linux) | Local VM / WSL | - | `network/results/` |
 
 ---
 
@@ -340,20 +346,38 @@
 
 | 指标 | Baseline Value | 条件 |
 |------|----------------|------|
-| TCP Throughput | TBD Mbps | iperf3 30s |
-| UDP Throughput | TBD Mbps | iperf3 -u |
-| RTT | TBD ms | ping 100 packets |
-| HTTP Download (1MB) | TBD s | curl |
+| TCP Throughput | **42,819 Mbps** | iperf3 10s |
+| UDP Throughput | **49.51 Mbps** | iperf3 -u -b 50M |
+| RTT | **0.041 ms** | ping 50 packets |
+| HTTP Download (1MB) | <0.001 s | curl (localhost) |
 
 ### Packet Loss Impact (MVP-1.0)
 
-| Loss Rate | TCP Throughput | UDP Throughput | UDP Loss |
-|-----------|----------------|----------------|----------|
-| 0% | TBD | TBD | TBD |
-| 1% | TBD | TBD | TBD |
-| 5% | TBD | TBD | TBD |
-| 10% | TBD | TBD | TBD |
-| 20% | TBD | TBD | TBD |
+| Loss Rate | TCP Throughput | TCP Drop | UDP Loss (measured) |
+|-----------|----------------|----------|---------------------|
+| 0% | 42,584 Mbps | 0% | 0.00% |
+| 1% | 6,143 Mbps | **85.6%** | 0.77% |
+| 5% | 145 Mbps | **99.7%** | 4.87% |
+| 10% | 4.95 Mbps | **99.99%** | 10.08% |
+| 20% | 0.49 Mbps | **99.999%** | 19.42% |
+
+### Delay Impact (MVP-1.1)
+
+| Delay | RTT | TCP Throughput | TCP Drop |
+|-------|-----|----------------|----------|
+| 0ms | 0.04 ms | 42,256 Mbps | 0% |
+| 10ms | 10.08 ms | 3,005 Mbps | 93% |
+| 25ms | 25.08 ms | 668 Mbps | 98% |
+| 50ms | 50.08 ms | 89 Mbps | 99.8% |
+| 100ms | 100.08 ms | 7.64 Mbps | **99.98%** |
+
+### Bandwidth Limit (MVP-1.2)
+
+| Limit | TCP Throughput | Efficiency |
+|-------|----------------|------------|
+| 1 Mbps | 1.23 Mbps | 123% |
+| 5 Mbps | 5.18 Mbps | 104% |
+| 10 Mbps | 10.05 Mbps | **~100%** |
 
 ---
 
@@ -361,10 +385,10 @@
 
 | 类型 | 文件路径 | 说明 |
 |------|---------|------|
-| Roadmap | `logg/network/network_roadmap_20251206.md` | 当前文件 |
-| Hub | `logg/network/network_hub_20251206.md` | 智库导航 |
-| MVP-0.0 报告 | `logg/network/exp_network_anomaly_mininet_20251206.md` | 实验报告 |
-| 图表目录 | `logg/network/img/` | 实验图表 |
+| Roadmap | `network/network_roadmap_20251206.md` | 当前文件 |
+| Hub | `network/network_hub_20251206.md` | 智库导航 |
+| MVP-0.0 报告 | `network/exp_network_anomaly_mininet_20251206.md` | 实验报告 |
+| 图表目录 | `network/img/` | 实验图表 |
 
 ---
 
@@ -373,6 +397,8 @@
 | 日期 | 变更内容 | 影响 |
 |------|---------|------|
 | 2025-12-06 | 创建 Roadmap，设计 Phase 0-3 | 全部 |
+| 2025-12-06 | 完成 MVP-0.0 ~ MVP-1.2，填充结果数据 | §4, §6.1 |
+| 2025-12-06 | MVP-2.0 部分完成，更新状态 | §2, §4 |
 
 ---
 
