@@ -1,0 +1,235 @@
+{
+  "delay_sweep": [
+    {
+      "ping": {
+        "rtt_min_ms": 0.028, 
+        "rtt_avg_ms": 0.04, 
+        "rtt_max_ms": 0.067, 
+        "rtt_mdev_ms": 0.012
+      }, 
+      "delay_ms": 0, 
+      "tcp": {
+        "throughput_mbps": 42256.2, 
+        "retransmits": 0
+      }
+    }, 
+    {
+      "ping": {
+        "rtt_min_ms": 10.045, 
+        "rtt_avg_ms": 10.08, 
+        "rtt_max_ms": 10.114, 
+        "rtt_mdev_ms": 0.119
+      }, 
+      "delay_ms": 10, 
+      "tcp": {
+        "throughput_mbps": 3005.44, 
+        "retransmits": 90
+      }
+    }, 
+    {
+      "ping": {
+        "rtt_min_ms": 25.045, 
+        "rtt_avg_ms": 25.083, 
+        "rtt_max_ms": 25.11, 
+        "rtt_mdev_ms": 0.123
+      }, 
+      "delay_ms": 25, 
+      "tcp": {
+        "throughput_mbps": 668.288, 
+        "retransmits": 45
+      }
+    }, 
+    {
+      "ping": {
+        "rtt_min_ms": 50.056, 
+        "rtt_avg_ms": 50.082, 
+        "rtt_max_ms": 50.099, 
+        "rtt_mdev_ms": 0.126
+      }, 
+      "delay_ms": 50, 
+      "tcp": {
+        "throughput_mbps": 89.3116, 
+        "retransmits": 17
+      }
+    }, 
+    {
+      "ping": {
+        "rtt_min_ms": 100.044, 
+        "rtt_avg_ms": 100.079, 
+        "rtt_max_ms": 100.1, 
+        "rtt_mdev_ms": 0.329
+      }, 
+      "delay_ms": 100, 
+      "tcp": {
+        "throughput_mbps": 7.64185, 
+        "retransmits": 3
+      }
+    }
+  ], 
+  "baseline": {
+    "tests": {
+      "http": {
+        "file_size_mb": 1, 
+        "download_time_s": 0.0
+      }, 
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t35340,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:17:24 GMT\",\r\n\t\t\t\"timesecs\":\t1765001844\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "ping": {
+        "rtt_min_ms": 0.031, 
+        "rtt_avg_ms": 0.041, 
+        "rtt_max_ms": 0.068, 
+        "rtt_mdev_ms": 0.012
+      }, 
+      "tcp": {
+        "throughput_mbps": 42819.2, 
+        "retransmits": 0
+      }
+    }, 
+    "condition": "baseline"
+  }, 
+  "timestamp": "2025-12-06T01:17:13.659593", 
+  "loss_sweep": [
+    {
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t45930,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:18:39 GMT\",\r\n\t\t\t\"timesecs\":\t1765001919\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 42583.8, 
+        "retransmits": 0
+      }, 
+      "loss_percent": 0
+    }, 
+    {
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t42729,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:19:01 GMT\",\r\n\t\t\t\"timesecs\":\t1765001941\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 6143.15, 
+        "retransmits": 54397
+      }, 
+      "loss_percent": 1
+    }, 
+    {
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\"\r\n\t},\r\n\t\"intervals\":\t[],\r\n\t\"end\":\t{\r\n\t},\r\n\t\"error\":\t\"error - the server is busy running a test. try again later\"\r\n}\r\n", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 144.692, 
+        "retransmits": 6302
+      }, 
+      "loss_percent": 5
+    }, 
+    {
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t57299,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:19:37 GMT\",\r\n\t\t\t\"timesecs\":\t1765001977\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 4.94899, 
+        "retransmits": 591
+      }, 
+      "loss_percent": 10
+    }, 
+    {
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\"\r\n\t},\r\n\t\"intervals\":\t[],\r\n\t\"end\":\t{\r\n\t},\r\n\t\"error\":\t\"error - the server is busy running a test. try again later\"\r\n}\r\n", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 0.48535, 
+        "retransmits": 108
+      }, 
+      "loss_percent": 20
+    }
+  ], 
+  "http_tests": [
+    {
+      "delay_ms": 0, 
+      "download_time_s": 0.0, 
+      "condition": "baseline", 
+      "loss_percent": 0
+    }, 
+    {
+      "delay_ms": 0, 
+      "download_time_s": 0.0, 
+      "condition": "5% loss", 
+      "loss_percent": 5
+    }, 
+    {
+      "delay_ms": 50, 
+      "download_time_s": 0.001, 
+      "condition": "50ms delay", 
+      "loss_percent": 0
+    }, 
+    {
+      "delay_ms": 50, 
+      "download_time_s": 0.001, 
+      "condition": "5% loss + 50ms delay", 
+      "loss_percent": 5
+    }
+  ], 
+  "experiment_id": "FN-20251206-network-01", 
+  "config": {
+    "bandwidths": [
+      1, 
+      5, 
+      10
+    ], 
+    "iperf_duration_s": 10, 
+    "delays": [
+      0, 
+      10, 
+      25, 
+      50, 
+      100
+    ], 
+    "loss_rates": [
+      0, 
+      1, 
+      5, 
+      10, 
+      20
+    ], 
+    "ping_count": 50
+  }, 
+  "bandwidth_sweep": [
+    {
+      "bandwidth_limit_mbps": 1, 
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t36255,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:25:31 GMT\",\r\n\t\t\t\"timesecs\":\t1765002331\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 1.22896, 
+        "retransmits": 0
+      }
+    }, 
+    {
+      "bandwidth_limit_mbps": 5, 
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t50706,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:27:01 GMT\",\r\n\t\t\t\"timesecs\":\t1765002421\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 5.17906, 
+        "retransmits": 0
+      }
+    }, 
+    {
+      "bandwidth_limit_mbps": 10, 
+      "udp": {
+        "raw": "{\r\n\t\"start\":\t{\r\n\t\t\"connected\":\t[{\r\n\t\t\t\t\"socket\":\t4,\r\n\t\t\t\t\"local_host\":\t\"10.0.0.2\",\r\n\t\t\t\t\"local_port\":\t46657,\r\n\t\t\t\t\"remote_host\":\t\"10.0.0.1\",\r\n\t\t\t\t\"remote_port\":\t5201\r\n\t\t\t}],\r\n\t\t\"version\":\t\"iperf 3.0.11\",\r\n\t\t\"system_info\":\t\"Linux netx10 4.10.0-28-generic #32~16.04.2-Ubuntu SMP Thu Jul 20 10:19:48 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux\\n\",\r\n\t\t\"timestamp\":\t{\r\n\t\t\t\"time\":\t\"Sat, 06 Dec 2025 06:27:37 GMT\",\r\n\t\t\t\"timesecs\":\t1765002457\r\n\t\t},\r\n\t\t\"connecting_to\":\t{\r\n\t\t\t\"host\":\t\"10.0.0.1\",\r\n\t\t\t\"port\":\t5201\r", 
+        "error": "'sum_received'"
+      }, 
+      "tcp": {
+        "throughput_mbps": 10.0542, 
+        "retransmits": 0
+      }
+    }
+  ]
+}
