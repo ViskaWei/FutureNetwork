@@ -181,7 +181,7 @@ Beyond the numbers, the framework’s value lies in its structure: by separating
 
 Several extensions are natural and high-impact. First, the framework should incorporate richer AI communication patterns, such as ring all-reduce emulation with parameterized message sizes and synchronization points, enabling direct study of straggler amplification under loss and jitter. Second, multi-flow competition and queueing dynamics should be introduced to reflect realistic contention, including background cross traffic and multiple concurrent TCP/UDP flows; these scenarios would allow investigation of fairness, bufferbloat, and tail latency. Third, data center–style topologies (e.g., leaf-spine or Clos) would enable controlled study of path diversity and congestion spreading. Finally, additional anomaly dimensions supported by tc/netem—such as packet corruption and reordering—can be integrated into the anomaly layer and evaluated systematically, particularly for protocols or applications that are sensitive to reordering-induced spurious retransmissions. Together, these directions position the framework as a scalable basis for both teaching fundamental network phenomena and exploring research-grade questions about robustness under imperfect networks.
 
----
+<!-- ---
 
 ## Appendix: Figure Summary
 
@@ -198,7 +198,7 @@ Several extensions are natural and high-impact. First, the framework should inco
 
 All figures are located in `network/img/`.
 
----
+--- -->
 <!-- 
 ## (B) Prompts for a Coding Agent to Draw Figures (Reference)
 
