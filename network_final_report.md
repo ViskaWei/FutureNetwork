@@ -3,7 +3,7 @@
 ---
 > **Name:** Network Anomaly Performance Evaluation Framework  
 > **Github Repo:** `https://github.com/ViskaWei/FutureNetwork`  
-> **Keywords:** `Mininet`, `TCP Performance`, `Network Emulation`, `Packet Loss`, `Latency`, `Bandwidth Throttling`, `Traffic Control (tc)`, `netem`, `iperf3`  
+> **Keywords:** `Mininet`, `TCP Performance`, `Packet Loss`, `Latency`, `Bandwidth Throttling`, `Traffic Control`, `netem`, `iperf3`  
 > **Author:** Viska Wei  
 > **Date:** 2025-12-08  
 ---

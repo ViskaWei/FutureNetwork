@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Network Anomaly Performance Evaluation</title>
+  <title>network_final_report</title>
   <style>
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -15,15 +15,46 @@
     }
     body {
       margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
+      max-width: 72em;
+      padding: 10px;
       hyphens: auto;
       overflow-wrap: break-word;
       text-rendering: optimizeLegibility;
       font-kerning: normal;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0.5em 0;
+    }
+    h2 {
+      font-size: 1.2em;
+      margin: 0.8em 0 0.3em 0;
+    }
+    h3 {
+      font-size: 1.05em;
+      margin: 0.6em 0 0.2em 0;
+    }
+    p {
+      margin: 0.4em 0;
+    }
+    .figure-row {
+      display: flex;
+      gap: 10px;
+      margin: 0.5em 0;
+    }
+    .figure-row .figure {
+      flex: 1;
+      text-align: center;
+    }
+    .figure-row .figure img {
+      max-width: 100%;
+    }
+    .figure-row .figure em {
+      display: block;
+      font-size: 0.85em;
+      margin-top: 0.2em;
     }
     @media (max-width: 600px) {
       body {
@@ -35,24 +66,105 @@
       }
     }
     @media print {
+      @page {
+        size: A4;
+        margin: 8mm;
+      }
       html {
         background-color: white;
       }
       body {
         background-color: transparent;
         color: black;
+        font-size: 10pt;
+        line-height: 1.3;
+        column-count: 2;
+        column-gap: 8px;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+      }
+      h1 {
         font-size: 12pt;
+        margin: 0 0 5px 0;
+        column-span: all;
+        text-align: center;
+      }
+      /* Header table (metadata) - span all columns */
+      body > table:first-of-type {
+        column-span: all;
+        margin-bottom: 8px;
+      }
+      /* Abstract section - span all columns */
+      .abstract-section {
+        column-span: all;
+        margin-bottom: 8px;
+      }
+      .abstract-section p {
+        text-align: justify;
+      }
+      h2 {
+        font-size: 9pt;
+        margin: 4px 0 2px 0;
+        column-span: all;
+      }
+      h3 {
+        font-size: 8.5pt;
+        margin: 3px 0 1px 0;
+      }
+      p {
+        margin: 2px 0;
+      }
+      table {
+        font-size: 7pt;
+        margin: 3px 0;
+      }
+      th, td {
+        padding: 1px 3px;
+      }
+      img {
+        max-height: 100px;
+      }
+      /* Figure 0 - full column width */
+      .figure-full {
+        text-align: center;
+        margin: 4px 0;
+      }
+      .figure-full img {
+        max-height: none;
+        width: 100%;
+      }
+      .figure-row {
+        gap: 6px;
+        margin: 4px 0;
+      }
+      .figure-row .figure img {
+        max-height: 90px;
+      }
+      .figure-row .figure em {
+        font-size: 6pt;
       }
       p, h2, h3 {
-        orphans: 3;
-        widows: 3;
+        orphans: 2;
+        widows: 2;
       }
       h2, h3, h4 {
         page-break-after: avoid;
       }
+      hr {
+        margin: 3px 0;
+      }
+      ul, ol {
+        margin: 2px 0;
+        padding-left: 12px;
+      }
     }
-    p {
-      margin: 1em 0;
+    table {
+      margin: 0.3em 0;
+      font-size: 0.9em;
+    }
+    hr {
+      margin: 0.5em 0;
     }
     a {
       color: #1a1a1a;
@@ -172,63 +284,6 @@
   </style>
 </head>
 <body>
-<header id="title-block-header">
-<h1 class="title">Network Anomaly Performance Evaluation</h1>
-</header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a
-href="#evaluating-the-performance-impact-of-network-anomalies-via-a-mininet-based-simulation-framework"
-id="toc-evaluating-the-performance-impact-of-network-anomalies-via-a-mininet-based-simulation-framework">Evaluating
-the Performance Impact of Network Anomalies via a Mininet-Based
-Simulation Framework</a>
-<ul>
-<li><a href="#abstract" id="toc-abstract">Abstract</a></li>
-<li><a href="#background-motivation" id="toc-background-motivation">1.
-Background &amp; Motivation</a></li>
-<li><a href="#project-overview" id="toc-project-overview">2. Project
-Overview</a></li>
-<li><a href="#experiment-setup" id="toc-experiment-setup">3. Experiment
-Setup</a></li>
-<li><a href="#system-design" id="toc-system-design">4. System
-Design</a></li>
-<li><a href="#experiments-results" id="toc-experiments-results">5.
-Experiments &amp; Results</a>
-<ul>
-<li><a href="#summary-of-key-findings"
-id="toc-summary-of-key-findings">Summary of Key Findings</a></li>
-<li><a href="#baseline-mininet-link-capacity-and-latency-floor"
-id="toc-baseline-mininet-link-capacity-and-latency-floor">5.1 Baseline:
-Mininet Link Capacity and Latency Floor</a></li>
-<li><a href="#tcp-throughput-under-varying-packet-loss"
-id="toc-tcp-throughput-under-varying-packet-loss">5.2 TCP Throughput
-Under Varying Packet Loss</a></li>
-<li><a href="#delay-vs-rtt-linearity-and-directionality-effects"
-id="toc-delay-vs-rtt-linearity-and-directionality-effects">5.3 Delay vs
-RTT: Linearity and Directionality Effects</a></li>
-<li><a href="#tcp-throughput-under-increasing-delay"
-id="toc-tcp-throughput-under-increasing-delay">5.4 TCP Throughput Under
-Increasing Delay</a></li>
-<li><a href="#bandwidth-throttling-enforced-throughput-ceilings"
-id="toc-bandwidth-throttling-enforced-throughput-ceilings">5.5 Bandwidth
-Throttling: Enforced Throughput Ceilings</a></li>
-<li><a
-href="#udp-under-delayjitter-status-and-instrumentation-constraints"
-id="toc-udp-under-delayjitter-status-and-instrumentation-constraints">5.6
-UDP Under Delay/Jitter: Status and Instrumentation Constraints</a></li>
-<li><a
-href="#application-layer-http-preliminary-results-and-visibility-limits"
-id="toc-application-layer-http-preliminary-results-and-visibility-limits">5.7
-Application-Layer HTTP: Preliminary Results and Visibility
-Limits</a></li>
-</ul></li>
-<li><a href="#conclusion-future-work" id="toc-conclusion-future-work">6.
-Conclusion &amp; Future Work</a></li>
-<li><a href="#appendix-figure-summary"
-id="toc-appendix-figure-summary">Appendix: Figure Summary</a></li>
-</ul></li>
-</ul>
-</nav>
 <h1
 id="evaluating-the-performance-impact-of-network-anomalies-via-a-mininet-based-simulation-framework">Evaluating
 the Performance Impact of Network Anomalies via a Mininet-Based
@@ -245,9 +300,8 @@ Framework</td>
 </tr>
 <tr>
 <td>&gt; <strong>Keywords:</strong> <code>Mininet</code>,
-<code>TCP Performance</code>, <code>Network Emulation</code>,
-<code>Packet Loss</code>, <code>Latency</code>,
-<code>Bandwidth Throttling</code>, <code>Traffic Control (tc)</code>,
+<code>TCP Performance</code>, <code>Packet Loss</code>, <code>Latency</code>,
+<code>Bandwidth Throttling</code>, <code>Traffic Control</code>,
 <code>netem</code>, <code>iperf3</code></td>
 </tr>
 <tr>
@@ -258,6 +312,7 @@ Framework</td>
 </tr>
 </tbody>
 </table>
+<div class="abstract-section">
 <h2 id="abstract">Abstract</h2>
 <p>Networked systems increasingly depend on predictable performance
 despite operating over links that exhibit packet loss, variable latency,
@@ -281,6 +336,7 @@ measurement effects. The implemented framework is designed as a reusable
 testbed for coursework and research, supporting multiple topologies,
 automated experiment orchestration, and extensible traffic workloads
 beyond microbenchmarks.</p>
+</div>
 <h2 id="background-motivation">1. Background &amp; Motivation</h2>
 <p>Packet loss, propagation and queueing delay, jitter (delay
 variation), and bandwidth drops are not exceptional corner cases but
@@ -472,7 +528,7 @@ that interpretations remain consistent and that comparisons across
 parameter settings are visually faithful.</p>
 <h2 id="experiments-results">5. Experiments &amp; Results</h2>
 <h3 id="summary-of-key-findings">Summary of Key Findings</h3>
-<p><img src="network/img/fig_combined_summary.png"
+<p class="figure-full"><img src="network/img/fig_combined_summary.png"
 alt="Combined Summary of Key Experimental Results" /> <em>Figure 0:
 Combined 2×3 grid summary showing TCP throughput degradation under loss
 and delay, RTT linearity, bandwidth accuracy, and other key
@@ -548,21 +604,11 @@ non-linear degradation:</p>
 <p>The observation is that even 1% random loss reduces TCP throughput by
 more than an order of magnitude, and by 10% loss TCP becomes effectively
 unusable at the tested baseline capacity.</p>
-<p><img src="network/img/fig1_tcp_throughput_vs_loss.png"
-alt="TCP Throughput vs Packet Loss" /> <em>Figure 1: TCP Throughput
-Degradation under Packet Loss (log-scale). Throughput drops by ~86% at
-just 1% loss and becomes negligible at 10%+ loss.</em></p>
-<p>Retransmission counts reported by iperf3 further illuminate the
-mechanism: at 1% loss, retransmissions spike dramatically because the
-sender attempts to sustain high sending rates, while at higher loss
-rates the throughput collapses so quickly that the absolute volume of
-transmitted data decreases, leading to fewer total retransmissions
-despite worse link quality.</p>
-<p><img src="network/img/fig2_tcp_retransmits_vs_loss.png"
-alt="TCP Retransmissions vs Packet Loss" /> <em>Figure 2: TCP
-Retransmissions bar chart showing peak retransmissions at moderate loss
-(1%) when sending rate is still high, with throughput
-annotations.</em></p>
+<div class="figure-row">
+<div class="figure"><img src="network/img/fig1_tcp_throughput_vs_loss.png" alt="TCP Throughput vs Packet Loss" /><em>Figure 1: TCP Throughput vs Loss (log-scale). ~86% drop at 1% loss.</em></div>
+<div class="figure"><img src="network/img/fig2_tcp_retransmits_vs_loss.png" alt="TCP Retransmissions vs Packet Loss" /><em>Figure 2: Retransmissions peak at 1% loss when sending rate is still high.</em></div>
+</div>
+<p>Retransmission counts further illuminate the mechanism: at 1% loss, retransmissions spike dramatically; at higher loss rates throughput collapses so quickly that fewer total retransmissions occur despite worse link quality.</p>
 <p>This behavior is consistent with established congestion-control
 dynamics. TCP interprets loss as a congestion signal, triggering window
 reduction and a more conservative sending rate. When configured loss is
@@ -616,12 +662,12 @@ exactly by the injected amount:</p>
 correlation (R² extremely close to 1), indicating that the anomaly
 injection is precise and that the measurement pipeline successfully
 captures the applied impairment.</p>
-<p><img src="network/img/fig3_rtt_vs_delay_regression.png"
-alt="RTT vs Injected Delay with Linear Regression" /> <em>Figure 3: RTT
-vs Injected Delay with linear regression overlay showing R², slope
-(~1.0), and intercept. Confirms precise anomaly injection with
-unidirectional delay.</em></p>
-<p>An important methodological insight emerges from this result: the RTT
+<div class="figure-row">
+<div class="figure"><img src="network/img/fig3_rtt_vs_delay_regression.png" alt="RTT vs Injected Delay" /><em>Figure 3: RTT vs Delay (R²≈1.0, slope≈1.0). Confirms precise unidirectional injection.</em></div>
+<div class="figure"><img src="network/img/fig5_rtt_mdev_vs_delay.png" alt="RTT Variation" /><em>Figure 5: RTT mdev remains sub-ms.</em></div>
+</div>
+<p>RTT increases by ~delay (not 2×delay) because delay was injected unidirectionally. RTT variation remains small.</p>
+<!-- An important methodological insight emerges from this result: the RTT
 increases by approximately <strong>delay</strong>, not
 <strong>2×delay</strong>, because the delay was injected on a single
 egress interface, affecting only one direction of the ping exchange.
@@ -640,12 +686,7 @@ deterministic offset and that host scheduling noise is minor relative to
 the injected delay. This is informative for experiment design: in the
 absence of explicit jitter injection, the environment provides stable
 delay characteristics, making it suitable for isolating the effect of
-mean delay on throughput.</p>
-<p><img src="network/img/fig5_rtt_mdev_vs_delay.png"
-alt="RTT Variation (mdev) vs Injected Delay" /> <em>Figure 5: RTT
-Variation (mdev) showing sub-millisecond stability across all delay
-settings, confirming deterministic delay behavior without jitter
-injection.</em></p>
+mean delay on throughput. -->
 <h3 id="tcp-throughput-under-increasing-delay">5.4 TCP Throughput Under
 Increasing Delay</h3>
 <p>To quantify how latency affects throughput, the delay sweep is
@@ -689,87 +730,13 @@ values and measures iperf3 TCP throughput:</p>
 </table>
 <p>The throughput reduction is again dramatic, with 100 ms injected
 delay reducing throughput to single-digit Mbps in this environment.</p>
-<p><img src="network/img/fig4_tcp_throughput_vs_delay.png"
-alt="TCP Throughput vs Injected Delay" /> <em>Figure 4: TCP Throughput
-vs Injected Delay (log-scale) demonstrating BDP sensitivity. Sharp
-degradation from 42 Gbps at 0ms to ~8 Mbps at 100ms delay indicates
-window-limited regime.</em></p>
-<p>The qualitative trend aligns with the fundamental relationship
-between TCP sending rate, congestion window size, and RTT: to sustain a
-high throughput under higher RTT, TCP must grow and maintain a larger
-effective congestion window (roughly proportional to the BDP). In short
-experiments and with default socket buffer sizing, the achievable window
-can become the limiting factor, producing throughput ceilings lower than
-what the link could otherwise support. This interpretation is consistent
-with the measured values: the implied BDP at 100 ms delay and 7.64 Mbps
-is roughly 0.095 MB, which is compatible with conservative window/buffer
-sizing and suggests a window-limited regime. In such a regime, even
-without loss, increased RTT can sharply reduce observed throughput
-because the sender cannot keep enough data in flight to fill the
-pipe.</p>
-<p>In addition, throughput measurements in Mininet can reflect host-side
-CPU scheduling and per-packet processing overhead under high pps
-conditions; introducing delay changes pacing and may shift bottlenecks
-between host processing, buffering, and congestion control dynamics.
-Consequently, while the absolute values should not be interpreted as
-universal limits, the experiment robustly demonstrates the direction and
-magnitude of sensitivity: in a TCP-controlled pipeline, higher latency
-can reduce throughput by orders of magnitude unless window growth and
-buffering are provisioned accordingly.</p>
-<h3 id="bandwidth-throttling-enforced-throughput-ceilings">5.5 Bandwidth
-Throttling: Enforced Throughput Ceilings</h3>
-<p>The bandwidth limiting experiment evaluates whether tc shaping can
-impose accurate throughput ceilings. Using tbf with rates {1, 5, 10
-Mbps}, the measured TCP throughput is:</p>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 33%" />
-<col style="width: 37%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: right;">Configured Limit (Mbps)</th>
-<th style="text-align: right;">Measured Throughput (Mbps)</th>
-<th style="text-align: right;">Efficiency (Measured / Limit)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1.23</td>
-<td style="text-align: right;">123%</td>
-</tr>
-<tr>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">5.18</td>
-<td style="text-align: right;">104%</td>
-</tr>
-<tr>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">10.05</td>
-<td style="text-align: right;">101%</td>
-</tr>
-</tbody>
-</table>
-<p>The general outcome is that shaping produces throughput close to the
-configured ceiling, with small overshoots.</p>
-<p><img src="network/img/fig6_bandwidth_accuracy.png"
-alt="Bandwidth Ceiling Accuracy" /> <em>Figure 6: Bandwidth Ceiling
-Accuracy with y=x reference line. Measured throughput closely tracks
-configured limits with small overshoots (123%, 104%, 101%) attributable
-to burst and measurement effects.</em></p>
-<p>These overshoots are plausibly explained by burst parameters and
-measurement granularity. Token-bucket mechanisms allow short bursts
-above the nominal rate within configured burst and latency settings;
-furthermore, iperf3 reports averaged throughput over intervals that can
-smooth transient burst effects into slightly elevated estimates. The
-results nevertheless support a key design claim: the framework can
-reliably impose bandwidth ceilings, enabling experiments where
-throughput constraints are controlled independently of loss and latency.
-This capability is essential for application-layer studies (e.g., HTTP
-transfer time) where baseline links are otherwise too fast to reveal
-meaningful completion-time differences.</p>
+<div class="figure-row">
+<div class="figure"><img src="network/img/fig4_tcp_throughput_vs_delay.png" alt="TCP Throughput vs Delay" /><em>Figure 4: TCP Throughput vs Delay. 42 Gbps→8 Mbps at 100ms (BDP-limited).</em></div>
+<div class="figure"><img src="network/img/fig6_bandwidth_accuracy.png" alt="Bandwidth Accuracy" /><em>Figure 6: Bandwidth ceiling accuracy (overshoots: 123%, 104%, 101%).</em></div>
+</div>
+<p>Higher RTT requires larger congestion windows (proportional to BDP); with default buffer sizing, throughput becomes window-limited. Bandwidth shaping via tbf produces accurate ceilings with small burst-related overshoots.</p>
+<h3 id="bandwidth-throttling-enforced-throughput-ceilings">5.5 Bandwidth Throttling</h3>
+<p>Using tbf with rates {1, 5, 10 Mbps}, measured throughput closely tracks configured limits (1.23, 5.18, 10.05 Mbps respectively), supporting reliable bandwidth ceiling enforcement.</p>
 <h3
 id="udp-under-delayjitter-status-and-instrumentation-constraints">5.6
 UDP Under Delay/Jitter: Status and Instrumentation Constraints</h3>
@@ -808,7 +775,7 @@ measured times remain effectively unchanged under the tested
 impairments, yielding values around 0.001 s at most.</p>
 <p>This result is best interpreted as a visibility limitation rather
 than as evidence that HTTP is insensitive.</p>
-<p><img src="network/img/fig7_http_download_time.png"
+<p class="figure-full"><img src="network/img/fig7_http_download_time.png"
 alt="HTTP Download Time" /> <em>Figure 7: HTTP Download Time
 demonstrating measurement visibility limitation. Sub-millisecond
 completion times under all conditions indicate that larger objects or
@@ -868,67 +835,24 @@ spurious retransmissions. Together, these directions position the
 framework as a scalable basis for both teaching fundamental network
 phenomena and exploring research-grade questions about robustness under
 imperfect networks.</p>
-<hr />
-<h2 id="appendix-figure-summary">Appendix: Figure Summary</h2>
-<table>
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 22%" />
-<col style="width: 48%" />
-</colgroup>
-<thead>
-<tr>
-<th>Figure</th>
-<th>File</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Fig 0</td>
-<td><code>fig_combined_summary.png</code></td>
-<td>2×3 grid summary of all key plots</td>
-</tr>
-<tr>
-<td>Fig 1</td>
-<td><code>fig1_tcp_throughput_vs_loss.png</code></td>
-<td>TCP Throughput vs Packet Loss (log-scale, with degradation
-annotations)</td>
-</tr>
-<tr>
-<td>Fig 2</td>
-<td><code>fig2_tcp_retransmits_vs_loss.png</code></td>
-<td>TCP Retransmissions bar chart with throughput annotations</td>
-</tr>
-<tr>
-<td>Fig 3</td>
-<td><code>fig3_rtt_vs_delay_regression.png</code></td>
-<td>RTT vs Delay with linear regression (R², slope, intercept)</td>
-</tr>
-<tr>
-<td>Fig 4</td>
-<td><code>fig4_tcp_throughput_vs_delay.png</code></td>
-<td>TCP Throughput vs Delay (log-scale, BDP sensitivity)</td>
-</tr>
-<tr>
-<td>Fig 5</td>
-<td><code>fig5_rtt_mdev_vs_delay.png</code></td>
-<td>RTT Variation (mdev) showing sub-millisecond stability</td>
-</tr>
-<tr>
-<td>Fig 6</td>
-<td><code>fig6_bandwidth_accuracy.png</code></td>
-<td>Bandwidth Ceiling Accuracy with y=x reference line</td>
-</tr>
-<tr>
-<td>Fig 7</td>
-<td><code>fig7_http_download_time.png</code></td>
-<td>HTTP Download Time (measurement visibility demo)</td>
-</tr>
-</tbody>
-</table>
-<p>All figures are located in <code>network/img/</code>.</p>
-<hr />
+<!-- ---
+
+## Appendix: Figure Summary
+
+| Figure | File | Description |
+|--------|------|-------------|
+| Fig 0 | `fig_combined_summary.png` | 2×3 grid summary of all key plots |
+| Fig 1 | `fig1_tcp_throughput_vs_loss.png` | TCP Throughput vs Packet Loss (log-scale, with degradation annotations) |
+| Fig 2 | `fig2_tcp_retransmits_vs_loss.png` | TCP Retransmissions bar chart with throughput annotations |
+| Fig 3 | `fig3_rtt_vs_delay_regression.png` | RTT vs Delay with linear regression (R², slope, intercept) |
+| Fig 4 | `fig4_tcp_throughput_vs_delay.png` | TCP Throughput vs Delay (log-scale, BDP sensitivity) |
+| Fig 5 | `fig5_rtt_mdev_vs_delay.png` | RTT Variation (mdev) showing sub-millisecond stability |
+| Fig 6 | `fig6_bandwidth_accuracy.png` | Bandwidth Ceiling Accuracy with y=x reference line |
+| Fig 7 | `fig7_http_download_time.png` | HTTP Download Time (measurement visibility demo) |
+
+All figures are located in `network/img/`.
+
+--- -->
 <!-- 
 ## (B) Prompts for a Coding Agent to Draw Figures (Reference)
 
