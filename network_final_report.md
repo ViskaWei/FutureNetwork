@@ -1,5 +1,14 @@
 # Evaluating the Performance Impact of Network Anomalies via a Mininet-Based Simulation Framework
 
+---
+> **Name:** Network Anomaly Performance Evaluation Framework  
+> **Github Repo:** `https://github.com/ViskaWei/FutureNetwork`  
+> **Keywords:** `Mininet`, `TCP Performance`, `Network Emulation`, `Packet Loss`, `Latency`, `Bandwidth Throttling`, `Traffic Control (tc)`, `netem`, `iperf3`  
+> **Author:** Viska Wei  
+> **Date:** 2025-12-08  
+---
+
+
 ## Abstract
 
 Networked systems increasingly depend on predictable performance despite operating over links that exhibit packet loss, variable latency, jitter, and transient bandwidth drops. These anomalies can disproportionately affect transport protocols and higher-layer behaviors, and in modern distributed workloads—particularly synchronous AI training primitives such as all-reduce—small degradations can amplify into global slowdowns due to barrier synchronization and tail-latency effects. This report presents a Mininet-based simulation framework for controlled, repeatable anomaly injection using Linux traffic control (tc), and evaluates the performance impact of representative anomalies on TCP throughput, round-trip time (RTT), and bandwidth-limited behavior. Experimental results show that TCP goodput degrades extremely sharply under even modest loss (e.g., a reduction from 42,583.8 Mbps at 0% loss to 6,143.15 Mbps at 1% loss and to 4.95 Mbps at 10% loss), while injected delay translates linearly into measured RTT with near-perfect correlation (slope ≈ 1.0 when delay is applied unidirectionally). Bandwidth shaping via token-bucket filtering produces near-target throughput ceilings with small overshoots attributable to burst and measurement effects. The implemented framework is designed as a reusable testbed for coursework and research, supporting multiple topologies, automated experiment orchestration, and extensible traffic workloads beyond microbenchmarks. 
@@ -50,6 +59,13 @@ Finally, a **result analysis and visualization layer** aggregates records across
 
 ## 5. Experiments & Results
 
+### Summary of Key Findings
+
+![Combined Summary of Key Experimental Results](network/img/fig_combined_summary.png)
+*Figure 0: Combined 2×3 grid summary showing TCP throughput degradation under loss and delay, RTT linearity, bandwidth accuracy, and other key metrics.*
+
+---
+
 ### 5.1 Baseline: Mininet Link Capacity and Latency Floor
 
 The baseline experiment characterizes the emulated environment without injected anomalies. In the single-switch topology, TCP throughput reaches extremely high values (on the order of 42 Gbps), consistent with the fact that Mininet’s veth-based virtual links operate at kernel speed and are not constrained by physical NIC rates. RTT measured by ping is correspondingly low (≈0.04 ms), reflecting minimal propagation delay and the absence of queueing under baseline conditions. These baseline numbers are valuable not as real-network surrogates, but as a reference point for relative degradation and for understanding how impairments dominate behavior once introduced. 
@@ -66,7 +82,15 @@ The first primary experiment evaluates how random packet loss impacts TCP throug
 |                10% |                  4.95 |                 0.0001 |      99.99% |
 |                20% |                  0.49 |                ~0.0000 |     99.999% |
 
-The observation is that even 1% random loss reduces TCP throughput by more than an order of magnitude, and by 10% loss TCP becomes effectively unusable at the tested baseline capacity. Retransmission counts reported by iperf3 further illuminate the mechanism: at 1% loss, retransmissions spike dramatically because the sender attempts to sustain high sending rates, while at higher loss rates the throughput collapses so quickly that the absolute volume of transmitted data decreases, leading to fewer total retransmissions despite worse link quality. 
+The observation is that even 1% random loss reduces TCP throughput by more than an order of magnitude, and by 10% loss TCP becomes effectively unusable at the tested baseline capacity.
+
+![TCP Throughput vs Packet Loss](network/img/fig1_tcp_throughput_vs_loss.png)
+*Figure 1: TCP Throughput Degradation under Packet Loss (log-scale). Throughput drops by ~86% at just 1% loss and becomes negligible at 10%+ loss.*
+
+Retransmission counts reported by iperf3 further illuminate the mechanism: at 1% loss, retransmissions spike dramatically because the sender attempts to sustain high sending rates, while at higher loss rates the throughput collapses so quickly that the absolute volume of transmitted data decreases, leading to fewer total retransmissions despite worse link quality.
+
+![TCP Retransmissions vs Packet Loss](network/img/fig2_tcp_retransmits_vs_loss.png)
+*Figure 2: TCP Retransmissions bar chart showing peak retransmissions at moderate loss (1%) when sending rate is still high, with throughput annotations.* 
 
 This behavior is consistent with established congestion-control dynamics. TCP interprets loss as a congestion signal, triggering window reduction and a more conservative sending rate. When configured loss is random (rather than congestion-driven), TCP still reacts as if the network is congested, repeatedly reducing the congestion window and struggling to regain sending capacity. The effect becomes extreme in an environment with an ultra-low baseline RTT and an ultra-high baseline throughput ceiling; window reductions translate into disproportionate losses in goodput because the ideal sending rate would require sustaining a large effective window and steady ACK pacing. In other words, the emulation setting amplifies the contrast between “loss-free kernel-speed” and “loss-triggered conservative control,” making the sensitivity of TCP to even small loss unmistakable.
 
@@ -82,11 +106,17 @@ The second experiment examines how injected delay translates into measured RTT. 
 |                  50 |            50.082 |
 |                 100 |           100.079 |
 
-A linear fit yields an essentially unit slope and near-perfect correlation (R² extremely close to 1), indicating that the anomaly injection is precise and that the measurement pipeline successfully captures the applied impairment. 
+A linear fit yields an essentially unit slope and near-perfect correlation (R² extremely close to 1), indicating that the anomaly injection is precise and that the measurement pipeline successfully captures the applied impairment.
+
+![RTT vs Injected Delay with Linear Regression](network/img/fig3_rtt_vs_delay_regression.png)
+*Figure 3: RTT vs Injected Delay with linear regression overlay showing R², slope (~1.0), and intercept. Confirms precise anomaly injection with unidirectional delay.*
 
 An important methodological insight emerges from this result: the RTT increases by approximately **delay**, not **2×delay**, because the delay was injected on a single egress interface, affecting only one direction of the ping exchange. This directionality matters for interpretation and test design. If the goal is to emulate a symmetric path delay of D in each direction, then netem should be applied on both directions (or on interfaces corresponding to both host-to-switch and switch-to-host egress paths). Treating “unidirectional versus bidirectional” injection as a first-class configuration avoids misinterpretation and supports more realistic modeling for applications that depend on round-trip behavior.
 
 Observed RTT variation (mdev) remains small across the sweep (rising from ≈0.012 ms at baseline to ≈0.329 ms at 100 ms delay), suggesting that in this campaign the delay configuration acts primarily as a deterministic offset and that host scheduling noise is minor relative to the injected delay. This is informative for experiment design: in the absence of explicit jitter injection, the environment provides stable delay characteristics, making it suitable for isolating the effect of mean delay on throughput.
+
+![RTT Variation (mdev) vs Injected Delay](network/img/fig5_rtt_mdev_vs_delay.png)
+*Figure 5: RTT Variation (mdev) showing sub-millisecond stability across all delay settings, confirming deterministic delay behavior without jitter injection.*
 
 ### 5.4 TCP Throughput Under Increasing Delay
 
@@ -100,7 +130,10 @@ To quantify how latency affects throughput, the delay sweep is repeated while me
 |                  50 |                 89.31 |                 99.79% |
 |                 100 |                  7.64 |                 99.98% |
 
-The throughput reduction is again dramatic, with 100 ms injected delay reducing throughput to single-digit Mbps in this environment. 
+The throughput reduction is again dramatic, with 100 ms injected delay reducing throughput to single-digit Mbps in this environment.
+
+![TCP Throughput vs Injected Delay](network/img/fig4_tcp_throughput_vs_delay.png)
+*Figure 4: TCP Throughput vs Injected Delay (log-scale) demonstrating BDP sensitivity. Sharp degradation from 42 Gbps at 0ms to ~8 Mbps at 100ms delay indicates window-limited regime.*
 
 The qualitative trend aligns with the fundamental relationship between TCP sending rate, congestion window size, and RTT: to sustain a high throughput under higher RTT, TCP must grow and maintain a larger effective congestion window (roughly proportional to the BDP). In short experiments and with default socket buffer sizing, the achievable window can become the limiting factor, producing throughput ceilings lower than what the link could otherwise support. This interpretation is consistent with the measured values: the implied BDP at 100 ms delay and 7.64 Mbps is roughly 0.095 MB, which is compatible with conservative window/buffer sizing and suggests a window-limited regime. In such a regime, even without loss, increased RTT can sharply reduce observed throughput because the sender cannot keep enough data in flight to fill the pipe.
 
@@ -116,7 +149,10 @@ The bandwidth limiting experiment evaluates whether tc shaping can impose accura
 |                       5 |                       5.18 |                          104% |
 |                      10 |                      10.05 |                          101% |
 
-The general outcome is that shaping produces throughput close to the configured ceiling, with small overshoots. 
+The general outcome is that shaping produces throughput close to the configured ceiling, with small overshoots.
+
+![Bandwidth Ceiling Accuracy](network/img/fig6_bandwidth_accuracy.png)
+*Figure 6: Bandwidth Ceiling Accuracy with y=x reference line. Measured throughput closely tracks configured limits with small overshoots (123%, 104%, 101%) attributable to burst and measurement effects.*
 
 These overshoots are plausibly explained by burst parameters and measurement granularity. Token-bucket mechanisms allow short bursts above the nominal rate within configured burst and latency settings; furthermore, iperf3 reports averaged throughput over intervals that can smooth transient burst effects into slightly elevated estimates. The results nevertheless support a key design claim: the framework can reliably impose bandwidth ceilings, enabling experiments where throughput constraints are controlled independently of loss and latency. This capability is essential for application-layer studies (e.g., HTTP transfer time) where baseline links are otherwise too fast to reveal meaningful completion-time differences.
 
@@ -130,7 +166,12 @@ From a framework perspective, this issue is instructive: reproducible experiment
 
 To connect link anomalies to application-level experience, a preliminary HTTP experiment measures download completion time for small test files under baseline and under combined anomalies (e.g., 5% loss and/or 50 ms delay). In the current environment, transfers of a 1 MB file complete in less than a millisecond under baseline, and the measured times remain effectively unchanged under the tested impairments, yielding values around 0.001 s at most. 
 
-This result is best interpreted as a visibility limitation rather than as evidence that HTTP is insensitive. Two factors dominate: the baseline link is extremely fast, and the transferred object is too small for impairments to dominate completion time at the chosen measurement resolution. The framework already provides the correct remedy: increase object size (e.g., 100 MB or larger), or introduce a realistic bandwidth ceiling to move the experiment into a regime where transfer time and retransmission overhead become measurable. Consequently, application-layer evaluation is positioned as a straightforward extension rather than as a redesign, and the preliminary HTTP study primarily serves to validate the orchestration pipeline and highlight parameter regimes required for meaningful application-level measurements.
+This result is best interpreted as a visibility limitation rather than as evidence that HTTP is insensitive.
+
+![HTTP Download Time](network/img/fig7_http_download_time.png)
+*Figure 7: HTTP Download Time demonstrating measurement visibility limitation. Sub-millisecond completion times under all conditions indicate that larger objects or bandwidth ceilings are needed for meaningful application-level measurements.*
+
+Two factors dominate: the baseline link is extremely fast, and the transferred object is too small for impairments to dominate completion time at the chosen measurement resolution. The framework already provides the correct remedy: increase object size (e.g., 100 MB or larger), or introduce a realistic bandwidth ceiling to move the experiment into a regime where transfer time and retransmission overhead become measurable. Consequently, application-layer evaluation is positioned as a straightforward extension rather than as a redesign, and the preliminary HTTP study primarily serves to validate the orchestration pipeline and highlight parameter regimes required for meaningful application-level measurements.
 
 ## 6. Conclusion & Future Work
 
@@ -142,7 +183,24 @@ Several extensions are natural and high-impact. First, the framework should inco
 
 ---
 
-## (B) Prompts for a Coding Agent to Draw Figures (No Code Here)
+## Appendix: Figure Summary
+
+| Figure | File | Description |
+|--------|------|-------------|
+| Fig 0 | `fig_combined_summary.png` | 2×3 grid summary of all key plots |
+| Fig 1 | `fig1_tcp_throughput_vs_loss.png` | TCP Throughput vs Packet Loss (log-scale, with degradation annotations) |
+| Fig 2 | `fig2_tcp_retransmits_vs_loss.png` | TCP Retransmissions bar chart with throughput annotations |
+| Fig 3 | `fig3_rtt_vs_delay_regression.png` | RTT vs Delay with linear regression (R², slope, intercept) |
+| Fig 4 | `fig4_tcp_throughput_vs_delay.png` | TCP Throughput vs Delay (log-scale, BDP sensitivity) |
+| Fig 5 | `fig5_rtt_mdev_vs_delay.png` | RTT Variation (mdev) showing sub-millisecond stability |
+| Fig 6 | `fig6_bandwidth_accuracy.png` | Bandwidth Ceiling Accuracy with y=x reference line |
+| Fig 7 | `fig7_http_download_time.png` | HTTP Download Time (measurement visibility demo) |
+
+All figures are located in `network/img/`.
+
+---
+<!-- 
+## (B) Prompts for a Coding Agent to Draw Figures (Reference)
 
 ### Figure Prompt 1: TCP Throughput vs Packet Loss (Log-Scale)
 
@@ -170,4 +228,4 @@ Draw a scatter plot where x-axis is configured bandwidth limits (Mbps) `[1, 5, 1
 
 ### Figure Prompt 7 (Optional): HTTP Download Time Sensitivity (Visibility Demonstration)
 
-Draw a bar chart comparing conditions `["baseline", "5% loss", "50ms delay", "5%+50ms"]` with download times in seconds `["<0.001", "<0.001", "0.001", "0.001"]`. Use this as a “measurement visibility” figure: the caption should emphasize that small files on a very fast emulated link compress timing differences below resolution, motivating larger objects and/or bandwidth ceilings in future experiments.
+Draw a bar chart comparing conditions `["baseline", "5% loss", "50ms delay", "5%+50ms"]` with download times in seconds `["<0.001", "<0.001", "0.001", "0.001"]`. Use this as a “measurement visibility” figure: the caption should emphasize that small files on a very fast emulated link compress timing differences below resolution, motivating larger objects and/or bandwidth ceilings in future experiments. -->
